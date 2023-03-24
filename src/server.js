@@ -1,6 +1,7 @@
 import express from 'express';
 import configViewEngine from './configs/viewEngine';
 import initDeviceRoute from './routes/device';
+import initUserRoute from './routes/user';
 //có thể chuyển dữ liệu ở port khác
 import cors from 'cors';
 require('dotenv').config();
@@ -32,7 +33,7 @@ configViewEngine(app);
 
 //init web route
 initDeviceRoute(app);
-
+initUserRoute(app);
 
 //image
 //handle 404 not found
