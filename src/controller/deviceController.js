@@ -9,7 +9,7 @@ let getAllControlEquip = async (req, res) =>{
 let addControlEquip = async (req, res) =>{
     let result = await deviceModel.addControlEquip(req.body);
     if (result === true) return res.status(200).json({
-            data: "success"
+            message: "success"
         });
     return res.status(400).json({result})
 };
@@ -20,10 +20,10 @@ let editControlEquip = async (req, res) =>{
     let result = await deviceModel.editControlEquip([id, body]);
     if (result === true)
     return res.status(200).json({
-        data: "success"
+        message: "success"
     });
     return res.status(400).json({
-        data: result
+        message: result
     });
 };
 
@@ -31,10 +31,10 @@ let deleteControlEquip = async (req, res) =>{
     let rs = await deviceModel.deleteControlEquip(req.params.id);
     if(rs === true)
         return res.status(200).json({
-            data: "success"
+            message: "success"
         });
     else return res.status(400).json({
-        data: rs
+        message: rs
     })
 };
 
@@ -43,10 +43,10 @@ let setStatusControlEquip = async (req, res) => {
     let status = req.params.status;
     let rs = await deviceModel.setStatusControlEquip([status, id]);
     if (rs) return res.status(200).json({
-        data: "success"
+        message: "success"
     })
     else return res.status(400).json({
-        data: rs
+        message: rs
     })
 }
 let setAutoControlEquip = async (req, res) => {
@@ -54,10 +54,10 @@ let setAutoControlEquip = async (req, res) => {
     let auto = req.params.auto;
     let rs = await deviceModel.setAutoControlEquip([auto, id]);
     if (rs) return res.status(200).json({
-        data: "success"
+        message: "success"
     })
     else return res.status(400).json({
-        data: rs
+        message: rs
     })
 }
 let getAllDataEquip = async (req, res) =>{
@@ -70,9 +70,9 @@ let getAllDataEquip = async (req, res) =>{
 let addDataEquip = async (req, res) =>{
     let result = await deviceModel.addDataEquip(req.body);
     if (result === true) return res.status(200).json({
-            data: "success"
+            message: "success"
         });
-    return res.status(400).json({ data: result})
+    return res.status(400).json({ message: result})
 };
 
 let editDataEquip = async (req, res) =>{
@@ -81,10 +81,10 @@ let editDataEquip = async (req, res) =>{
     let result = await deviceModel.editDataEquip([id, body]);
     if (result === true)
     return res.status(200).json({
-        data: "success"
+        message: "success"
     });
     return res.status(400).json({
-        data: result
+        message: result
     });
 };
 
@@ -92,10 +92,10 @@ let deleteDataEquip = async (req, res) =>{
     let rs = await deviceModel.deleteDataEquip(req.params.id);
     if(rs === true)
         return res.status(200).json({
-            data: "success"
+            message: "success"
         });
     else return res.status(400).json({
-        data: rs
+        message: rs
     })
 };
 let setStatusDataEquip = async (req, res) => {
@@ -103,10 +103,10 @@ let setStatusDataEquip = async (req, res) => {
     let status = req.params.status;
     let rs = await deviceModel.setStatusDataEquip([status, id]);
     if (rs) return res.status(200).json({
-        data: "success"
+        message: "success"
     })
     else return res.status(400).json({
-        data: rs
+        message: rs
     })
 }
 module.exports = {

@@ -29,16 +29,16 @@ upload.any();
 const initDeviceRoute = (app) =>{
     router.get('/getAllControlEquip', deviceController.getAllControlEquip);
     router.post('/addControlEquip', upload.any(), deviceController.addControlEquip);
-    router.put('/editControlEquip/:id', upload.any(), deviceController.editControlEquip);
+    router.patch('/editControlEquip/:id', upload.any(), deviceController.editControlEquip);
     router.delete('/deleteControlEquip/:id', deviceController.deleteControlEquip);
-    router.put('/setStatusControlEquip/:id/:status', upload.any(), deviceController.setStatusControlEquip);
-    router.put('/setAutoControlEquip/:id/:auto', upload.any(), deviceController.setAutoControlEquip);
+    router.patch('/setStatusControlEquip/:id/:status', upload.any(), deviceController.setStatusControlEquip);
+    router.patch('/setAutoControlEquip/:id/:auto', upload.any(), deviceController.setAutoControlEquip);
 
     router.get('/getAllDataEquip', deviceController.getAllDataEquip);
     router.post('/addDataEquip', upload.any(), deviceController.addDataEquip);
-    router.put('/editDataEquip/:id', upload.any(),deviceController.editDataEquip);
+    router.patch('/editDataEquip/:id', upload.any(),deviceController.editDataEquip);
     router.delete('/deleteDataEquip/:id', deviceController.deleteDataEquip);
-    router.put('/setStatusDataEquip/:id/:status', upload.any(), deviceController.setStatusDataEquip);
+    router.patch('/setStatusDataEquip/:id/:status', upload.any(), deviceController.setStatusDataEquip);
     
     return app.use('/device', router);
 }

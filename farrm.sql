@@ -37,15 +37,14 @@ CREATE TABLE if not EXISTS `farm` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE if not EXISTS `user` (
-  `username` varchar(100) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `bdate` date NOT NULL,
-  `gender` varchar(20) NOT NULL check (`gender` = 'Nam' or `gender` = 'Nữ'),
-  `phone_number` varchar(50) NOT NULL,
+  `bdate` date,
+  `gender` varchar(20) NOT NULL check (`gender` = 'Nam' or `gender` = 'Nữ' or `gender` = 'Khác'),
+  `phone_number` varchar(20) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `password` varchar(100) NOT NULL,
-  `isAdmin` int(1) NOT NULL DEFAULT 0,
-  `farm_id` int(10) NOT NULL
+  `password` varchar(250) NOT NULL,
+  `register_at` date NOT NULL,
+  `isAdmin` int(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
@@ -74,9 +73,7 @@ ALTER TABLE `statistical`
   ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`username`),
-  ADD KEY `farm_id` (`farm_id`);
-
+  ADD PRIMARY KEY (`phone_number`);
 
 ALTER TABLE `control_equipment`
   ADD CONSTRAINT `control_equipment_ibfk_1` FOREIGN KEY (`farm_id`) REFERENCES `farm` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -87,17 +84,10 @@ ALTER TABLE `data`
 ALTER TABLE `data_equipment`
   ADD CONSTRAINT `data_equipment_ibfk_1` FOREIGN KEY (`farm_id`) REFERENCES `farm` (`id`)  ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE `user`
-  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`farm_id`) REFERENCES `farm` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
 
 INSERT INTO `farm` (`id`, `name`, `address`) VALUES
 (1, 'Trang trại 1', 'Khu A'),
 (2, 'Trang trại 2', 'Khu B'),
 (3, 'Trang trại 3', 'Khu C');
 
-
-INSERT INTO `user` (`username`, `name`, `bdate`, `gender`, `phone_number`, `email`, `password`, `isAdmin`, `farm_id`) VALUES
-('giahuy13', 'Gia Huy', '2002-04-12', 'Nam', '0399609015', 'nguyengiahuy@gmail.com', 'Huy', 0, 1),
-('lequoctrang4', 'Lê Quốc Trạng', '2002-03-26', 'Nam', '0399609015', 'lequoctrang4@gmail.com', 'Lequoctrang', 1, 1);
 
