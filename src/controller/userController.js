@@ -146,7 +146,10 @@ let forgetPassword = async (req, res) =>{
     let user = users[0];
     if (email !== user.email)
         return res.status(404).json({message: "Không tìm thấy người dùng"})
-    
+    let pass = Math.floor(Math.random() * 110000000000);
+    const hashedPw = await hash(pass.toString(), 12);
+    // console.log(pass);
+    let rs = userModel.changePassword(hashedPw, user.id);
     sendEmail(email, "Reset password Smart Farm System", "View", "<h1>Pass của bạn là: 12345678</h1>");
     return res.status(200).json({
         message: "success"
