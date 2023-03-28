@@ -138,8 +138,16 @@ let changePassword = async (req, res) => {
 
 let forgetPassword = async (req, res) =>{
     let {email, phone} = req.body;
-    // await mailer.sendMail(email, "Verify Email", "Ok");
-    sendEmail(email, "Password reset", "Nhấn để xem pass", "12345");
+    let users = await userModel.getUserByPhone(phone);
+    if (Object.keys(users).length === 0)
+        return res.status(404).json({
+            message: 'Không tìm thấy người dùng'
+        })
+    let user = users[0];
+    if (email !== user.email)
+        return res.status(404).json({message: "Không tìm thấy người dùng"})
+    
+    sendEmail(email, "Reset password Smart Farm System", "View", "<h1>Pass của bạn là: 12345678</h1>");
     return res.status(200).json({
         message: "success"
     });
