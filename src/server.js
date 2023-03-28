@@ -4,7 +4,7 @@ import initDeviceRoute from './routes/device';
 import initUserRoute from './routes/user';
 //có thể chuyển dữ liệu ở port khác
 import cors from 'cors';
-require('dotenv').config();
+require('dotenv').config()
 
 
 const app = express()

@@ -3,11 +3,13 @@ import path from 'path';
 import deviceController from '../controller/deviceController'
 import multer from 'multer';
 import appRoot from "app-root-path";
+import {checkAuthMiddleware} from "../utils/auth";
+
 let router = express.Router();
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, appRoot + "/../Frontend/src/img");//"/src/public/image/");
+        cb(null, appRoot + "/../frontend/src/img");//"/src/public/image/");
     },
     filename: function (req, file, cb) {
         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
@@ -27,8 +29,9 @@ upload.any();
 
 
 const initDeviceRoute = (app) =>{
+    router.use(checkAuthMiddleware);
     router.get('/getAllControlEquip', deviceController.getAllControlEquip);
-    router.post('/addControlEquip', upload.any(), deviceController.addControlEquip);
+    router.post('/addControlEquip', upload.array('image'), deviceController.addControlEquip);
     router.patch('/editControlEquip/:id', upload.any(), deviceController.editControlEquip);
     router.delete('/deleteControlEquip/:id', deviceController.deleteControlEquip);
     router.patch('/setStatusControlEquip/:id/:status', upload.any(), deviceController.setStatusControlEquip);
