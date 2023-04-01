@@ -104,6 +104,27 @@ let editProfile = async (req, res) => {
     const authFragments = req.headers.authorization.split(' ');
     let {id} = parseJwt(authFragments[1]);
     let {name, bdate, gender, phone, email} = req.body;
+    let errors = {};
+    let User;
+    if(!validation.isValidPhone(phone))
+        errors.User = 'Số điện thoại không đúng!'
+    else{
+        User = await userModel.getUserByPhone(phone);
+        if (Object.keys(User).length === 1)
+            return res.status(404).json({message: "Số điện thoại đã tồn tại!"})
+    }
+    if (!validation.isValidEmail(email))
+        errors.email = 'Nhập sai định dạng email!';
+    else{
+        User = await userModel.getUserByEmail(email);
+        if (Object.keys(User).length === 1)
+            return res.status(404).json({message: "Email đã tồn tại!"})
+    }
+    if (!validation.isValidText(name, 6))
+        errors.email = 'Tên quá ngắn, vui lòng nhập đầy đủ!';
+    if(Object.keys(errors).length > 0){
+        return res.status(400).json(errors);
+    }
     let person = await userModel.editProfile(name, bdate, gender, phone, email, id);
     if (person !== "success")
         return res.status(400).json({message: person});

@@ -6,7 +6,7 @@ export const signIn = async(formValue) => {
       // make axios post request
       const res = await axios({
         method: "post",
-        url: `http://localhost:3001/user/login`,
+        url: `http://localhost:3001/user/signIn`,
         data: formValue,
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
       });
@@ -21,7 +21,7 @@ export const signUp = async(formValue) => {
       // make axios post request
       const res = await axios({
         method: "post",
-        url: `http://localhost:3001/user/signin`,
+        url: `http://localhost:3001/user/signUp`,
         data: formValue,
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
       });
@@ -37,7 +37,7 @@ export const getProfile = async(token) => {
       // make axios post request
       const res = await axios({
         method: "get",
-        url: `http://localhost:3001/user/getprofile`,
+        url: `http://localhost:3001/user/getProfile`,
         headers: {Authorization: `Bearer ${token}` },
       });
       return res.data;
@@ -67,7 +67,7 @@ export const setAvatar = async(token, formValue) => {
       // make axios post request
       const res = await axios({
         method: "patch",
-        url: `http://localhost:3001/user/setavatar`,
+        url: `http://localhost:3001/user/setAvatar`,
         data: formValue,
         headers: {Authorization: `Bearer ${token}`,
                   "Content-Type": "multipart/form-data" }
@@ -83,7 +83,7 @@ export const setAvatar = async(token, formValue) => {
       // make axios post request
       const res = await axios({
         method: "get",
-        url: `http://localhost:3001/user/getavatar`,
+        url: `http://localhost:3001/user/getAvatar`,
         headers: {Authorization: `Bearer ${token}`}
       });
       return res.data;

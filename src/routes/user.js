@@ -31,8 +31,8 @@ const initUserRoute = (app) =>{
     router.post('/signIn', userController.signIn);
     router.post('/forgetPassword', userController.forgetPassword);
     router.use(checkAuthMiddleware);
-    router.get('/getavatar', userController.getAvatar);
-    router.patch('/setavatar', upload.single('image'), userController.setAvatar);
+    router.get('/getAvatar', userController.getAvatar);
+    router.patch('/setAvatar', upload.single('image'), userController.setAvatar);
     router.get('/getProfile', userController.getProfile);
     router.patch('/editProfile', userController.editProfile);
     router.patch('/changePassword', userController.changePassword);
