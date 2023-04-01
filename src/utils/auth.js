@@ -1,8 +1,7 @@
 const { sign, verify } = require('jsonwebtoken');
-const { hash, compare } = require('bcryptjs');
 const { NotAuthError } = require('./errors');
 
-const KEY = 'supersecret';
+const KEY = 'supersecret123';
 
 
 export function createJSONToken(id) {
@@ -21,13 +20,13 @@ export function checkAuthMiddleware(req, res, next) {
   }
   if (!req.headers.authorization) {
     console.log('NOT AUTH. AUTH HEADER MISSING.');
-    return next(new NotAuthError('Not authenticated.'));
+    return res.status(401).json({msg: "Not authenticated."});
   }
   const authFragments = req.headers.authorization.split(' ');
 
   if (authFragments.length !== 2) {
     console.log('NOT AUTH. AUTH HEADER INVALID.');
-    return next(new NotAuthError('Not authenticated.'));
+    return res.status(401).json({msg: "Not authenticated."});
   }
   const authToken = authFragments[1];
   try {
@@ -35,7 +34,7 @@ export function checkAuthMiddleware(req, res, next) {
     req.token = validatedToken;
   } catch (error) {
     console.log('NOT AUTH. TOKEN INVALID.');
-    return next(new NotAuthError('Not authenticated.'));
+    return res.status(401).json({msg: "Not authenticated."});
   }
   next();
 }

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const login = async(formValue) => {
+export const signIn = async(formValue) => {
 
     try {
       // make axios post request
@@ -15,7 +15,7 @@ export const login = async(formValue) => {
         return error.response.data;
     }
   }
-export const signin = async(formValue) => {
+export const signUp = async(formValue) => {
 
     try {
       // make axios post request
@@ -38,7 +38,6 @@ export const getProfile = async(token) => {
       const res = await axios({
         method: "get",
         url: `http://localhost:3001/user/getprofile`,
-        data: formValue,
         headers: {Authorization: `Bearer ${token}` },
       });
       return res.data;

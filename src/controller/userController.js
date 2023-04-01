@@ -5,10 +5,10 @@ const {sendEmail} = require("../utils/mailer");
 const { hash, compare } = require('bcryptjs');
 import { createJSONToken, parseJwt} from '../utils/auth';
 let UserName;
-let login = async (req, res) => {
+let signIn = async (req, res) => {
     const {phone, password} = req.body;
     let errors = {};
-    if(!validation.isValidText(phone, 10))
+    if(!validation.isValidPhone(phone))
         errors.phone = 'Định dạng số điện thoại không đúng!'
     else{
         UserName = await userModel.getUserByPhone(phone);
@@ -18,21 +18,21 @@ let login = async (req, res) => {
     if(!validation.isValidText(password, 6))
         errors.password = 'Mật khẩu phải chứa ít nhất 6 ký tự!'
     else{
-        if (!await compare(password, UserName[0].password))
+        if (validation.isValidPhone(phone) && !await compare(password, UserName[0].password))
             return res.status(422).json({message: "Nhập sai mật khẩu! Vui lòng nhập lại!"})
     }
     if(Object.keys(errors).length > 0){
         return res.status(400).json(errors);
     }
     const token = createJSONToken(UserName[0].id,);
-    return res.status(200).json({token});
+    return res.status(200).json({ user: UserName[0], token});
 };
-let signin = async (req, res) => {
+let signUp = async (req, res) => {
     const {phone, email, password, rePassword, name} = req.body;
     let errors = {};
     let UserName;
-    if(!validation.isValidText(phone, 6))
-        errors.username = 'Số điện thoại chỉ có đúng 10 kí tự'
+    if(!validation.isValidPhone(phone))
+        errors.username = 'Số điện thoại không đúng';
     else{
         UserName = await userModel.getUserByPhone(phone);
         if (Object.keys(UserName).length === 1)
@@ -121,7 +121,7 @@ let changePassword = async (req, res) => {
     if (newPassword !== confirmPassword)
         return res.status(400).json({message: "Mật khẩu xác nhận không đúng!"});
     if (! await compare(oldPassword, User[0].password))
-        return res.status(422).json({message: "Nhập sai mật khẩu! Vui lòng nhập lại!"})
+        return res.status(422).json({message: "Nhập sai mật khẩu cũ! Vui lòng nhập lại!"})
     if(oldPassword === newPassword){
         return res.status(400).json({message: "Mật khẩu mới phải khác mật khẩu cũ!"});
     }
@@ -148,14 +148,13 @@ let forgetPassword = async (req, res) =>{
         return res.status(404).json({message: "Không tìm thấy người dùng"})
     let pass = Math.floor(Math.random() * 110000000000);
     const hashedPw = await hash(pass.toString(), 12);
-    // console.log(pass);
     let rs = userModel.changePassword(hashedPw, user.id);
-    sendEmail(email, "Reset password Smart Farm System", "View", "<h1>Pass của bạn là: 12345678</h1>");
+    sendEmail(email, "Reset password Smart Farm System", "View", "<h1>Pass của bạn là: "+ pass +"</h1>");
     return res.status(200).json({
         message: "success"
     });
 };
 module.exports = {
-    login, signin, getProfile, getAvatar, setAvatar, editProfile, changePassword,
+    signIn, signUp, getProfile, getAvatar, setAvatar, editProfile, changePassword,
     forgetPassword
 }

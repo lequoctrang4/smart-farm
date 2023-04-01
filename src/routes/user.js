@@ -27,8 +27,8 @@ const imageFilter = function (req, file, cb) {
 let upload = multer({ storage: storage, fileFilter: imageFilter });
 
 const initUserRoute = (app) =>{
-    router.post('/signin', userController.signin);
-    router.post('/login', userController.login);
+    router.post('/signUp', userController.signUp);
+    router.post('/signIn', userController.signIn);
     router.post('/forgetPassword', userController.forgetPassword);
     router.use(checkAuthMiddleware);
     router.get('/getavatar', userController.getAvatar);
