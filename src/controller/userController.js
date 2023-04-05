@@ -92,6 +92,8 @@ let getProfile = async (req, res) => {
     const authFragments = req.headers.authorization.split(' ');
     let {id} = parseJwt(authFragments[1]);    
     let result = await userModel.getUserById(id);
+    if (result.length === 0)
+      return res.status(404).json({ message: "Invalid" });
     return res.status(200).json({
         name: result[0].name,
         bdate: result[0].bdate,
@@ -110,16 +112,16 @@ let editProfile = async (req, res) => {
         errors.User = 'Số điện thoại không đúng!'
     else{
         User = await userModel.getUserByPhone(phone);
-        if (Object.keys(User).length === 1)
-            return res.status(404).json({message: "Số điện thoại đã tồn tại!"})
+        if (Object.keys(User).length === 1 && phone !== User[0].phone_number)
+          return res.status(404).json({ message: "Số điện thoại đã tồn tại!" });
     }
     if (!validation.isValidEmail(email))
         errors.email = 'Nhập sai định dạng email!';
-    else{
-        User = await userModel.getUserByEmail(email);
-        if (Object.keys(User).length === 1)
-            return res.status(404).json({message: "Email đã tồn tại!"})
-    }
+    // else{
+    //     User = await userModel.getUserByEmail(email);
+    //     if (Object.keys(User).length === 1 && email !== User[0].email)
+    //         return res.status(404).json({message: "Email đã tồn tại!"})
+    // }
     if (!validation.isValidText(name, 6))
         errors.email = 'Tên quá ngắn, vui lòng nhập đầy đủ!';
     if(Object.keys(errors).length > 0){
