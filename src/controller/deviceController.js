@@ -1,17 +1,39 @@
 import deviceModel from '../models/deviceModel'
 import { SetStatus } from '../api/adafruitApi';
+const fs = require("fs");
 let getControlEquipsByFarm = async (req, res) => {
   let result = await deviceModel.getControlEquipsByFarm(req.params.id);
+  for (let index = 0; index < result.length; index++) {
+    let image = result[index].image;
+    if (!image) continue;
+    let type = image.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/);
+    type = type[1];
+    const contents = fs.readFileSync("./src/public/image/device/" + image, {
+      encoding: "base64",
+    });
+    const buffedInput = contents.toString("base64");
+    result[index].image = "data:image/" + type + ";base64," + buffedInput;
+  }
   return res.status(200).json({
     data: result,
   });
 };
 
 let getControlEquipById = async (req, res) => {
-  let result = await deviceModel.getControlEquipById(req.params.id);
-  return res.status(200).json({
-    data: result,
-  });
+    let result = (await deviceModel.getControlEquipById(req.params.id))[0];
+    let image = result.image;
+    if (image) {
+        let type = image.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/);
+        type = type[1];
+        const contents = fs.readFileSync("./src/public/image/device/" + image, {
+        encoding: "base64",
+        });
+        const buffedInput = contents.toString("base64");
+        result.image = "data:image/" + type + ";base64," + buffedInput;
+    }
+    return res.status(200).json({
+        data: result,
+    });
 };
 
 let addControlEquip = async (req, res) =>{
@@ -75,12 +97,33 @@ let setAutoControlEquip = async (req, res) => {
 }
 let getDataEquipsByFarm = async (req, res) => {
   let result = await deviceModel.getDataEquipsByFarm(req.params.id);
+  for (let index = 0; index < result.length; index++) {
+    let image = result[index].image;
+    if (!image) continue;
+    let type = image.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/);
+    type = type[1];
+    const contents = fs.readFileSync("./src/public/image/device/" + image, {
+      encoding: "base64",
+    });
+    const buffedInput = contents.toString("base64");
+    result[index].image = "data:image/" + type + ";base64," + buffedInput;
+  }
   return res.status(200).json({
     data: result
   });
 };
 let getDataEquipById = async (req, res) => {
-  let result = await deviceModel.getDataEquipById(req.params.id);
+  let result = (await deviceModel.getDataEquipById(req.params.id))[0];
+  let image = result.image;
+  if (image) {
+    let type = image.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/);
+    type = type[1];
+    const contents = fs.readFileSync("./src/public/image/device/" + image, {
+      encoding: "base64",
+    });
+    const buffedInput = contents.toString("base64");
+    result.image = "data:image/" + type + ";base64," + buffedInput;
+  }
   return res.status(200).json({
     data: result,
   });
