@@ -57,11 +57,6 @@ let deleteControlEquip = async (req, res) =>{
 
 let setStatusControlEquip = async (req, res) => {
     let {id, status} = req.params;
-    if (!(status === "OFF" || status === "ON")){
-        return res.status(400).json({
-          message: "Only status: ON or OFF is allowed!",
-        });
-    }
     // let equip = await deviceModel.getControlEquipById(id);
     await deviceModel.setStatusControlEquip(id, status);
     return res.status(200).json({
@@ -70,11 +65,6 @@ let setStatusControlEquip = async (req, res) => {
 }
 let setAutoControlEquip = async (req, res) => {
     let {id, auto} = req.params;
-    if (!(auto === "OFF" || auto === "ON")) {
-      return res.status(400).json({
-        message: "Only auto: ON or OFF is allowed!",
-      });
-    }
     let rs = await deviceModel.setAutoControlEquip(auto, id);
     if (rs) return res.status(200).json({
         message: "success"

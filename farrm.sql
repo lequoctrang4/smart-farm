@@ -1,11 +1,14 @@
+DROP DATABASE `farm`;
+create database if not exists `farm`;
+use `farm`;
 
 CREATE TABLE if not EXISTS `control_equipment` (
   `id` int(10) NOT NULL,
   `name` varchar(100) NOT NULL,
   `feed_name` varchar(100) NOT NULL,
-  `status` VARCHAR(10) NOT NULL DEFAULT "OFF" check (`status` = 'ON' or `status` = 'OFF'),
+  `status` int(10) NOT NULL DEFAULT 0,
   `date_add` date NOT NULL DEFAULT CURRENT_DATE,
-  `auto` varchar(10) NOT NULL DEFAULT "OFF" check (`status` = 'ON' or `status` = 'OFF'),
+  `auto` int(10) NOT NULL DEFAULT 0,
   `image` varchar(100),
   `farm_id` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -88,4 +91,15 @@ INSERT INTO `farm` (`id`, `name`, `address`) VALUES
 (2, 'Trang trại 2', 'Khu B'),
 (3, 'Trang trại 3', 'Khu C');
 
+INSERT INTO `control_equipment` (`id`, `name`, `feed_name`, `status`, `date_add`, `auto`, `image`, `farm_id`) VALUES
+(1, 'Máy bơm', 'v10', 0, '2023-04-08', 0, '1.jpg', 1),
+(2, 'Đèn', 'v11', 0, '2023-04-08', 0, '2.jpg', 1);
 
+INSERT INTO `data_equipment` (`id`, `name`, `feed_name`, `date_add`, `min`, `max`, `time`, `image`, `farm_id`) VALUES
+(2, 'Cảm biến độ ẩm không khí', 'v2', '2023-04-08', 20, 30, 30, '2.jpg', 1),
+(3, 'Cảm biến độ ẩm đất', 'v3', '2023-04-08', 20, 30, 30, '3.jpg', 1),
+(4, 'Cảm biến áng sáng', 'v4', '2023-04-08', 20, 30, 30, '4.jpg', 1);
+
+INSERT INTO `user` (`id`, `name`, `bdate`, `gender`, `phone_number`, `email`, `password`, `register_at`, `avatar`, `isAdmin`) VALUES
+(1, 'Lê Quốc Trạng', NULL, 'Khác', '0399609015', 'lequoctrang4@gmail.com', '$2a$12$gFHY6dkZT5iPaYZs/sFOGugJhaK4Wt1op1AoMS67w9EAeDyTxGW7m', '2023-04-08', NULL, 0),
+(2, 'Gia Huy', NULL, 'Khác', '0828479273', 'giahuy575621@gmail.com', '$2a$12$ZHWR/vG9wzAXNiWEO7lR4ewi.DnaaQBwKfSe/s62p5ITTC5dCacfq', '2023-04-08', NULL, 0);
