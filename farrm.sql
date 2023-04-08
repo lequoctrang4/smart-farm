@@ -2,11 +2,10 @@
 CREATE TABLE if not EXISTS `control_equipment` (
   `id` int(10) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `position` varchar(100) NOT NULL,
+  `feed_name` varchar(100) NOT NULL,
   `status` VARCHAR(10) NOT NULL DEFAULT "OFF" check (`status` = 'ON' or `status` = 'OFF'),
   `date_add` date NOT NULL DEFAULT CURRENT_DATE,
   `auto` varchar(10) NOT NULL DEFAULT "OFF" check (`status` = 'ON' or `status` = 'OFF'),
-  `type` varchar(50) NOT NULL,
   `image` varchar(100),
   `farm_id` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -20,13 +19,12 @@ CREATE TABLE if not EXISTS `data` (
 CREATE TABLE if not EXISTS `data_equipment` (
   `id` int(10) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `position` varchar(100) NOT NULL,
+  `feed_name` varchar(100) NOT NULL,
   `status` varchar(10) NOT NULL DEFAULT 'OFF' check (`status` = 'ON' or `status` = 'OFF'),
   `date_add` date NOT NULL DEFAULT CURRENT_DATE,
   `min` int(11) NOT NULL DEFAULT 0,
   `max` int(11) NOT NULL DEFAULT 0,
   `time` int(11) NOT NULL DEFAULT 0,
-  `type` varchar(50) NOT NULL,
   `image` varchar(100),
   `farm_id` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

@@ -9,7 +9,7 @@ let router = express.Router();
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, appRoot + "/../frontend/src/img");//"/src/public/image/");
+        cb(null, appRoot + "/src/public/image/device");//"/src/public/image/");
     },
     filename: function (req, file, cb) {
         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
@@ -30,16 +30,16 @@ upload.any();
 
 const initDeviceRoute = (app) =>{
     router.use(checkAuthMiddleware);
-    router.get('/getAllControlEquip', deviceController.getAllControlEquip);
-    router.post('/addControlEquip', upload.array('image'), deviceController.addControlEquip);
-    router.patch('/editControlEquip/:id', upload.any(), deviceController.editControlEquip);
+    router.get('/getControlsEquipByFarm/:id', deviceController.getControlsEquipByFarm);
+    router.post('/addControlEquip', upload.single('image'), deviceController.addControlEquip);
+    router.patch('/editControlEquip/:id', upload.single('image'), deviceController.editControlEquip);
     router.delete('/deleteControlEquip/:id', deviceController.deleteControlEquip);
     router.patch('/setStatusControlEquip/:id/:status', upload.any(), deviceController.setStatusControlEquip);
     router.patch('/setAutoControlEquip/:id/:auto', upload.any(), deviceController.setAutoControlEquip);
 
-    router.get('/getAllDataEquip', deviceController.getAllDataEquip);
-    router.post('/addDataEquip', upload.any(), deviceController.addDataEquip);
-    router.patch('/editDataEquip/:id', upload.any(),deviceController.editDataEquip);
+    router.get("/getDatasEquipByFarm/:id", deviceController.getDatasEquipByFarm);
+    router.post('/addDataEquip', upload.single('image'), deviceController.addDataEquip);
+    router.patch('/editDataEquip/:id', upload.single('image'), deviceController.editDataEquip);
     router.delete('/deleteDataEquip/:id', deviceController.deleteDataEquip);
     router.patch('/setStatusDataEquip/:id/:status', upload.any(), deviceController.setStatusDataEquip);
     

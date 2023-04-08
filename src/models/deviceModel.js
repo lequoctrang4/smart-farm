@@ -1,25 +1,37 @@
 import pool from '../configs/connectDB'
 
-let getAllControlEquip = async () =>{
-    let [rs] = await pool.execute(`select * from control_equipment`);
-    return rs;
+let getControlsEquipByFarm = async (id) => {
+  let [rs] = await pool.execute(`select * from control_equipment where farm_id = ?`, [id]);
+  return rs;
+};
+let getControlsEquipById = async (id) => {
+  let [rs] = await pool.execute(
+    `select * from control_equipment where id = ?`,
+    [id]
+  );
+  return rs;
 };
 
-let addControlEquip = async (page) =>{
+let addControlEquip = async (page, filename) =>{
     try {
-        let {id, name, position,type, farm_id} = page;
-        await pool.execute(`INSERT INTO control_equipment(id, name, position, type, farm_id) VALUES (?,?,?,?,?)`,
-        [id, name, position, type, farm_id]);
+        let {id, name, feed_name, farm_id} = page;
+        await pool.execute(
+          `INSERT INTO control_equipment(id, name, feed_name, image, farm_id) VALUES (?,?,?,?,?)`,
+          [id, name, feed_name, filename, farm_id]
+        );
         return true;
     } catch (error) {
-        return error.sqlMessage;
+        return 'Thêm thiết bị thất bại';
     }
 };
 
 let editControlEquip = async (page) =>{
     try {
-        let {id, name, position, type, farm_id} = page[1];
-        await pool.execute(`UPDATE control_equipment SET id = ?, name =?, position = ?, type =?, farm_id =? where id = ?` , [id, name, position, type, farm_id, page[0]])
+        let {id, name, feed_name, farm_id} = page[1];
+        await pool.execute(
+          `UPDATE control_equipment SET id = ?, name =?, feed_name = ?, farm_id =? where id = ?`,
+          [id, name, feed_name, farm_id, page[0]]
+        );
         return true;
     } catch (error) {
         return error.sqlMessage;
@@ -51,16 +63,18 @@ let setAutoControlEquip = async (page) =>{
     }
 };
 
-let getAllDataEquip = async () =>{
-    let [rs] = await pool.execute(`select * from data_equipment`);
-    return rs;
+let getDatasEquipByFarm = async () => {
+  let [rs] = await pool.execute(`select * from data_equipment`);
+  return rs;
 };
 
-let addDataEquip = async (page) =>{
+let addDataEquip = async (page, filename) =>{
     try {
-        let {id, name, position, min, max, time, type, farm_id} = page;
-        await pool.execute(`INSERT INTO data_equipment(id, name, position, min, max, time, type, farm_id) VALUES (?,?,?,?,?,?,?,?)`,
-        [id, name, position, min, max, time, type, farm_id]);
+        let { id, name, feed_name, min, max, time, farm_id } = page;
+        await pool.execute(
+          `INSERT INTO data_equipment(id, name, feed_name, min, max, time, farm_id) VALUES (?,?,?,?,?,?,?)`,
+          [id, name, feed_name, min, max, time, farm_id]
+        );
         return true;
     } catch (error) {
         return error.sqlMessage;
@@ -69,9 +83,9 @@ let addDataEquip = async (page) =>{
 
 let editDataEquip = async (page) =>{
     try {
-        let {id, name, position, min, max, time, type, farm_id} = page[1];
-        await pool.execute(`UPDATE data_equipment SET id = ?, name =?, position = ?, min =?, max = ?, time = ?, type =?, farm_id =? where id = ?`,
-         [id, name, position, min, max, time, type, farm_id, page[0]])
+        let {id, name, feed_name, min, max, time, farm_id} = page[1];
+        await pool.execute(`UPDATE data_equipment SET id = ?, name =?, feed_name = ?, min =?, max = ?, time =?, farm_id =? where id = ?`,
+         [id, name, feed_name, min, max, time, farm_id, page[0]])
         return true;
     } catch (error) {
         return error.sqlMessage;
@@ -95,6 +109,16 @@ let setStatusDataEquip = async (page) =>{
     }
 };
 module.exports = {
-    getAllControlEquip, addControlEquip, editControlEquip, deleteControlEquip, setStatusControlEquip, setAutoControlEquip,
-    getAllDataEquip, addDataEquip, editDataEquip, deleteDataEquip, setStatusDataEquip
-}
+  getControlsEquipByFarm,
+  addControlEquip,
+  editControlEquip,
+  deleteControlEquip,
+  setStatusControlEquip,
+  setAutoControlEquip,
+  getDatasEquipByFarm,
+  addDataEquip,
+  editDataEquip,
+  deleteDataEquip,
+  setStatusDataEquip,
+  getControlsEquipById
+};

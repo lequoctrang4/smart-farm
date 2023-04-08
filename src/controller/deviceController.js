@@ -1,17 +1,22 @@
 import deviceModel from '../models/deviceModel'
-let getAllControlEquip = async (req, res) =>{
-    let result = await deviceModel.getAllControlEquip();
-    return res.status(200).json({
-        data: result
-    });
+import { SetStatus } from '../api/adafruitApi';
+let getControlsEquipByFarm = async (req, res) => {
+  let result = await deviceModel.getControlsEquipByFarm(req.params.id);
+  return res.status(200).json({
+    data: result,
+  });
 };
 
 let addControlEquip = async (req, res) =>{
-    let result = await deviceModel.addControlEquip(req.body);
+    if (req.fileValidationError)
+      return res.status(400).json({ message: req.fileValidationError });
+    else if (!req.file)
+      return res.status(400).json({ message: "No files selected" });
+    let result = await deviceModel.addControlEquip(req.body, req.file.filename);
     if (result === true) return res.status(200).json({
-            message: "success"
+            message: "Thêm thiết bị thành công!"
         });
-    return res.status(400).json({result})
+    return res.status(400).json({message:result})
 };
 
 let editControlEquip = async (req, res) =>{
@@ -19,9 +24,9 @@ let editControlEquip = async (req, res) =>{
     let body = req.body;
     let result = await deviceModel.editControlEquip([id, body]);
     if (result === true)
-    return res.status(200).json({
-        message: "success"
-    });
+        return res.status(200).json({
+            message: "Sửa thiết bị thành công"
+        });
     return res.status(400).json({
         message: result
     });
@@ -31,7 +36,7 @@ let deleteControlEquip = async (req, res) =>{
     let rs = await deviceModel.deleteControlEquip(req.params.id);
     if(rs === true)
         return res.status(200).json({
-            message: "success"
+            message: "Xóa thiết bị thành công!"
         });
     else return res.status(400).json({
         message: rs
@@ -41,6 +46,9 @@ let deleteControlEquip = async (req, res) =>{
 let setStatusControlEquip = async (req, res) => {
     let id = req.params.id;
     let status = req.params.status;
+    let equip = await deviceModel.getControlsEquipById(id);
+    if (equip)
+    await SetStatus()
     let rs = await deviceModel.setStatusControlEquip([status, id]);
     if (rs) return res.status(200).json({
         message: "success"
@@ -60,11 +68,11 @@ let setAutoControlEquip = async (req, res) => {
         message: rs
     })
 }
-let getAllDataEquip = async (req, res) =>{
-    let result = await deviceModel.getAllDataEquip();
-    return res.status(200).json({
-        data: result
-    });
+let getDatasEquipByFarm = async (req, res) => {
+  let result = await deviceModel.getDatasEquipByFarm();
+  return res.status(200).json({
+    data: result,
+  });
 };
 
 let addDataEquip = async (req, res) =>{
@@ -110,8 +118,17 @@ let setStatusDataEquip = async (req, res) => {
     })
 }
 module.exports = {
-    getAllControlEquip, addControlEquip, editControlEquip, deleteControlEquip, setStatusControlEquip, setAutoControlEquip,
-    getAllDataEquip, addDataEquip, editDataEquip, deleteDataEquip, setStatusDataEquip
-}
+  getControlsEquipByFarm,
+  addControlEquip,
+  editControlEquip,
+  deleteControlEquip,
+  setStatusControlEquip,
+  setAutoControlEquip,
+  getDatasEquipByFarm,
+  addDataEquip,
+  editDataEquip,
+  deleteDataEquip,
+  setStatusDataEquip,
+};
 
 
