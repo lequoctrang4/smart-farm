@@ -1,20 +1,19 @@
 import pool from '../configs/connectDB'
 
-let getControlsEquipByFarm = async (id) => {
-  let [rs] = await pool.execute(`select * from control_equipment where farm_id = ?`, [id]);
-  return rs;
-};
-let getControlsEquipById = async (id) => {
+let getControlEquipsByFarm = async (id) => {
   let [rs] = await pool.execute(
-    `select * from control_equipment where id = ?`,
+    `select * from control_equipment where farm_id = ?`,
     [id]
   );
   return rs;
 };
+let getControlEquipById = async (id) => {
+  let [rs] = await pool.execute(`select * from control_equipment where id = ?`, [id]);
+  return rs;
+};
 
-let addControlEquip = async (page, filename) =>{
+let addControlEquip = async (id, name, feed_name, farm_id, filename) =>{
     try {
-        let {id, name, feed_name, farm_id} = page;
         await pool.execute(
           `INSERT INTO control_equipment(id, name, feed_name, image, farm_id) VALUES (?,?,?,?,?)`,
           [id, name, feed_name, filename, farm_id]
@@ -25,12 +24,11 @@ let addControlEquip = async (page, filename) =>{
     }
 };
 
-let editControlEquip = async (page) =>{
+let editControlEquip = async (id, name, feed_name, farm_id, image, old_id) =>{
     try {
-        let {id, name, feed_name, farm_id} = page[1];
         await pool.execute(
-          `UPDATE control_equipment SET id = ?, name =?, feed_name = ?, farm_id =? where id = ?`,
-          [id, name, feed_name, farm_id, page[0]]
+          `UPDATE control_equipment SET id = ?, name =?, feed_name = ?, farm_id =? ,image = ? where id = ?`,
+          [id, name, feed_name, farm_id, image, old_id]
         );
         return true;
     } catch (error) {
@@ -46,34 +44,36 @@ let deleteControlEquip = async (page) =>{
         return error.sqlMessage;
     }
 };
-let setStatusControlEquip = async (page) =>{
+let setStatusControlEquip = async (id, status) =>{
     try {
-        await pool.execute(`UPDATE control_equipment SET status = ? WHERE id = ?`, [page[0], page[1]]);
+        await pool.execute(`UPDATE control_equipment SET status = ? WHERE id = ?`, [status, id]);
         return true;
     } catch (error) {
         return error.sqlMessage;
     }
 };
-let setAutoControlEquip = async (page) =>{
+let setAutoControlEquip = async (auto, id) =>{
     try {
-        await pool.execute(`UPDATE control_equipment SET auto = ? WHERE id = ?`, [page[0], page[1]]);
+        await pool.execute(`UPDATE control_equipment SET auto = ? WHERE id = ?`, [auto, id]);
         return true;
     } catch (error) {
         return error.sqlMessage;
     }
 };
 
-let getDatasEquipByFarm = async () => {
-  let [rs] = await pool.execute(`select * from data_equipment`);
+let getDataEquipsByFarm = async (id) => {
+  let [rs] = await pool.execute(`select * from data_equipment where farm_id =?`, [id]);
   return rs;
 };
-
-let addDataEquip = async (page, filename) =>{
+let getDataEquipById = async (id) => {
+  let [rs] = await pool.execute(`select * from data_equipment where id = ?`, [id]);
+  return rs;
+};
+let addDataEquip = async (id, name, feed_name, min, max, time, farm_id, image) =>{
     try {
-        let { id, name, feed_name, min, max, time, farm_id } = page;
         await pool.execute(
-          `INSERT INTO data_equipment(id, name, feed_name, min, max, time, farm_id) VALUES (?,?,?,?,?,?,?)`,
-          [id, name, feed_name, min, max, time, farm_id]
+          `INSERT INTO data_equipment(id, name, feed_name, min, max, time, image, farm_id) VALUES (?,?,?,?,?,?,?,?)`,
+          [id, name, feed_name, min, max, time, image, farm_id]
         );
         return true;
     } catch (error) {
@@ -81,11 +81,10 @@ let addDataEquip = async (page, filename) =>{
     }
 };
 
-let editDataEquip = async (page) =>{
+let editDataEquip = async (id, name, feed_name, min, max, time, farm_id, image, old_id) =>{
     try {
-        let {id, name, feed_name, min, max, time, farm_id} = page[1];
-        await pool.execute(`UPDATE data_equipment SET id = ?, name =?, feed_name = ?, min =?, max = ?, time =?, farm_id =? where id = ?`,
-         [id, name, feed_name, min, max, time, farm_id, page[0]])
+        await pool.execute(`UPDATE data_equipment SET id = ?, name =?, feed_name = ?, min =?, max = ?, time =?, image = ?, farm_id =? where id = ?`,
+         [id, name, feed_name, min, max, time, image, farm_id, old_id]);
         return true;
     } catch (error) {
         return error.sqlMessage;
@@ -100,25 +99,18 @@ let deleteDataEquip = async (page) =>{
         return error.sqlMessage;
     }
 };
-let setStatusDataEquip = async (page) =>{
-    try {
-        await pool.execute(`UPDATE data_equipment SET status = ? WHERE id = ?`, [page[0], page[1]]);
-        return true;
-    } catch (error) {
-        return error.sqlMessage;
-    }
-};
+
 module.exports = {
-  getControlsEquipByFarm,
+  getControlEquipsByFarm,
+  getControlEquipById,
   addControlEquip,
   editControlEquip,
   deleteControlEquip,
   setStatusControlEquip,
   setAutoControlEquip,
-  getDatasEquipByFarm,
+  getDataEquipsByFarm,
   addDataEquip,
   editDataEquip,
   deleteDataEquip,
-  setStatusDataEquip,
-  getControlsEquipById
+  getDataEquipById,
 };

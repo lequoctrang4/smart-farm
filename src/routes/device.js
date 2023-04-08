@@ -9,10 +9,10 @@ let router = express.Router();
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, appRoot + "/src/public/image/device");//"/src/public/image/");
+        cb(null, appRoot + "/src/public/image/device");
     },
     filename: function (req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+        cb(null, req.body.id + path.extname(file.originalname));
     }
 });
 
@@ -30,18 +30,19 @@ upload.any();
 
 const initDeviceRoute = (app) =>{
     router.use(checkAuthMiddleware);
-    router.get('/getControlsEquipByFarm/:id', deviceController.getControlsEquipByFarm);
+    router.get('/getControlEquipsByFarm/:id', deviceController.getControlEquipsByFarm);
+    router.get('/getControlEquipById/:id', deviceController.getControlEquipById);
     router.post('/addControlEquip', upload.single('image'), deviceController.addControlEquip);
     router.patch('/editControlEquip/:id', upload.single('image'), deviceController.editControlEquip);
     router.delete('/deleteControlEquip/:id', deviceController.deleteControlEquip);
     router.patch('/setStatusControlEquip/:id/:status', upload.any(), deviceController.setStatusControlEquip);
     router.patch('/setAutoControlEquip/:id/:auto', upload.any(), deviceController.setAutoControlEquip);
 
-    router.get("/getDatasEquipByFarm/:id", deviceController.getDatasEquipByFarm);
+    router.get("/getDataEquipsByFarm/:id", deviceController.getDataEquipsByFarm);
+    router.get("/getDataEquipById/:id", deviceController.getDataEquipById);
     router.post('/addDataEquip', upload.single('image'), deviceController.addDataEquip);
     router.patch('/editDataEquip/:id', upload.single('image'), deviceController.editDataEquip);
     router.delete('/deleteDataEquip/:id', deviceController.deleteDataEquip);
-    router.patch('/setStatusDataEquip/:id/:status', upload.any(), deviceController.setStatusDataEquip);
     
     return app.use('/device', router);
 }
