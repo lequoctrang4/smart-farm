@@ -5,7 +5,6 @@ use `farm`;
 CREATE TABLE if not EXISTS `control_equipment` (
   `id` varchar(10) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `feed_name` varchar(100) NOT NULL,
   `status` int(10) NOT NULL DEFAULT 0,
   `date_add` date NOT NULL DEFAULT CURRENT_DATE,
   `auto` int(10) NOT NULL DEFAULT 0,
@@ -22,7 +21,6 @@ CREATE TABLE if not EXISTS `data` (
 CREATE TABLE if not EXISTS `data_equipment` (
   `id` varchar(10) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `feed_name` varchar(100) NOT NULL,
   `date_add` date NOT NULL DEFAULT CURRENT_DATE,
   `min` int(11) NOT NULL DEFAULT 0,
   `max` int(11) NOT NULL DEFAULT 0,
