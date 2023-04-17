@@ -12,11 +12,11 @@ let getControlEquipById = async (id) => {
   return rs;
 };
 
-let addControlEquip = async (id, name, feed_name, farm_id, filename) =>{
+let addControlEquip = async (id, name, farm_id, filename) =>{
     try {
         await pool.execute(
-          `INSERT INTO control_equipment(id, name, feed_name, image, farm_id) VALUES (?,?,?,?,?)`,
-          [id, name, feed_name, filename, farm_id]
+          `INSERT INTO control_equipment(id, name, image, farm_id) VALUES (?,?,?,?)`,
+          [id, name, filename, farm_id]
         );
         return true;
     } catch (error) {
@@ -24,11 +24,11 @@ let addControlEquip = async (id, name, feed_name, farm_id, filename) =>{
     }
 };
 
-let editControlEquip = async (id, name, feed_name, farm_id, image, old_id) =>{
+let editControlEquip = async (id, name, farm_id, image, old_id) =>{
     try {
         await pool.execute(
-          `UPDATE control_equipment SET id = ?, name =?, feed_name = ?, farm_id =? ,image = ? where id = ?`,
-          [id, name, feed_name, farm_id, image, old_id]
+          `UPDATE control_equipment SET id = ?, name =? = ?, farm_id =? ,image = ? where id = ?`,
+          [id, name, farm_id, image, old_id]
         );
         return true;
     } catch (error) {
@@ -60,7 +60,12 @@ let setAutoControlEquip = async (auto, id) =>{
         return error.sqlMessage;
     }
 };
-
+let getDataEquip = async () => {
+    let [rs] = await pool.execute(
+      `select id from data_equipment`,
+    );
+    return rs;
+};
 let getDataEquipsByFarm = async (id) => {
   let [rs] = await pool.execute(`select * from data_equipment where farm_id =?`, [id]);
   return rs;
@@ -69,11 +74,11 @@ let getDataEquipById = async (id) => {
   let [rs] = await pool.execute(`select * from data_equipment where id = ?`, [id]);
   return rs;
 };
-let addDataEquip = async (id, name, feed_name, min, max, time, farm_id, image) =>{
+let addDataEquip = async (id, name, min, max, time, farm_id, image) =>{
     try {
         await pool.execute(
-          `INSERT INTO data_equipment(id, name, feed_name, min, max, time, image, farm_id) VALUES (?,?,?,?,?,?,?,?)`,
-          [id, name, feed_name, min, max, time, image, farm_id]
+          `INSERT INTO data_equipment(id, name, min, max, time, image, farm_id) VALUES (?,?,?,?,?,?,?)`,
+          [id, name, min, max, time, image, farm_id]
         );
         return true;
     } catch (error) {
@@ -81,10 +86,10 @@ let addDataEquip = async (id, name, feed_name, min, max, time, farm_id, image) =
     }
 };
 
-let editDataEquip = async (id, name, feed_name, min, max, time, farm_id, image, old_id) =>{
+let editDataEquip = async (id, name, min, max, time, farm_id, image, old_id) =>{
     try {
-        await pool.execute(`UPDATE data_equipment SET id = ?, name =?, feed_name = ?, min =?, max = ?, time =?, image = ?, farm_id =? where id = ?`,
-         [id, name, feed_name, min, max, time, image, farm_id, old_id]);
+        await pool.execute(`UPDATE data_equipment SET id = ?, name =? = ?, min =?, max = ?, time =?, image = ?, farm_id =? where id = ?`,
+         [id, name, min, max, time, image, farm_id, old_id]);
         return true;
     } catch (error) {
         return error.sqlMessage;
@@ -113,4 +118,5 @@ module.exports = {
   editDataEquip,
   deleteDataEquip,
   getDataEquipById,
+  getDataEquip,
 };

@@ -1,5 +1,5 @@
 import deviceModel from '../models/deviceModel'
-import { SetStatus } from '../api/adafruitApi';
+import { setStatus } from '../api/adafruitApi';
 const fs = require("fs");
 let getControlEquipsByFarm = async (req, res) => {
   let result = await deviceModel.getControlEquipsByFarm(req.params.id);
@@ -20,7 +20,11 @@ let getControlEquipsByFarm = async (req, res) => {
 };
 
 let getControlEquipById = async (req, res) => {
-    let result = (await deviceModel.getControlEquipById(req.params.id))[0];
+    let result = await deviceModel.getControlEquipById(req.params.id);
+    if (result.length === 0) return  res.status(404).json({
+        msg: 'Not Found!',
+    });
+    result = result[0];
     let image = result.image;
     if (image) {
         let type = image.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/);
@@ -41,8 +45,10 @@ let addControlEquip = async (req, res) =>{
       return res.status(400).json({ message: req.fileValidationError });
     else if (!req.file)
       return res.status(400).json({ message: "No files selected" });
-    let { id, name, feed_name, farm_id } = req.body;
-    let result = await deviceModel.addControlEquip(id, name, feed_name, farm_id, req.file.filename);
+    let { id, name, farm_id } = req.body;
+    if (!id || !name || !farm_id)
+      return res.status(400).json({ message: "Invalid Form" });
+    let result = await deviceModel.addControlEquip(id, name, farm_id, req.file.filename);
     if (result === true) return res.status(200).json({
             message: "Thêm thiết bị thành công!"
         });
@@ -55,8 +61,10 @@ let editControlEquip = async (req, res) =>{
     else if (!req.file)
       return res.status(400).json({ message: "No files selected" });
     let old_id = req.params.id;
-    let { id, name, feed_name, farm_id } = req.body;
-    let result = await deviceModel.editControlEquip(id, name, feed_name, farm_id, req.file.filename, old_id);
+    let { id, name, farm_id } = req.body;
+    if (!id || !name || !farm_id || !old_id)
+      return res.status(400).json({ message: "Invalid Form" });
+    let result = await deviceModel.editControlEquip(id, name, farm_id, req.file.filename, old_id);
     if (result === true)
         return res.status(200).json({
             message: "Sửa thiết bị thành công"
@@ -80,6 +88,7 @@ let deleteControlEquip = async (req, res) =>{
 let setStatusControlEquip = async (req, res) => {
     let {id, status} = req.params;
     // let equip = await deviceModel.getControlEquipById(id);
+    await setStatus(id, status);
     await deviceModel.setStatusControlEquip(id, status);
     return res.status(200).json({
         message: "success"
@@ -112,8 +121,14 @@ let getDataEquipsByFarm = async (req, res) => {
     data: result
   });
 };
+
 let getDataEquipById = async (req, res) => {
-  let result = (await deviceModel.getDataEquipById(req.params.id))[0];
+  let result = await deviceModel.getDataEquipById(req.params.id);
+  if (result.length === 0)
+    return res.status(404).json({
+      msg: "Not Found!",
+    });
+  result = result[0];
   let image = result.image;
   if (image) {
     let type = image.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/);
@@ -134,9 +149,10 @@ let addDataEquip = async (req, res) =>{
       return res.status(400).json({ message: req.fileValidationError });
     else if (!req.file)
       return res.status(400).json({ message: "No files selected" });
-    let {id, name, feed_name, min, max, time, farm_id} = req.body;
+    let {id, name, min, max, time, farm_id} = req.body;
+    if (!id || !name || !min || !max || !time || !farm_id) return res.status(400).json({ message: "Invalid Form" });
     let image = req.file.filename;
-    let result = await deviceModel.addDataEquip(id, name, feed_name, min, max, time, farm_id, image);
+    let result = await deviceModel.addDataEquip(id, name, min, max, time, farm_id, image);
     if (result === true) return res.status(200).json({
             message: "success"
     });
@@ -149,9 +165,12 @@ let editDataEquip = async (req, res) =>{
     else if (!req.file)
       return res.status(400).json({ message: "No files selected" });
     let old_id = req.params.id;
-    let {id, name, feed_name, min, max, time, farm_id} = req.body;
+    let {id, name, min, max, time, farm_id} = req.body;
+    if (!id || !name || !min || !max || !time || !farm_id || !old_id)
+      return res.status(400).json({ message: "Invalid Form" });
+
     let image = req.file.filename;
-    let result = await deviceModel.editDataEquip(id, name, feed_name, min, max, time, farm_id, image, old_id);
+    let result = await deviceModel.editDataEquip(id, name, min, max, time, farm_id, image, old_id);
     if (result === true)
     return res.status(200).json({
         message: "success"

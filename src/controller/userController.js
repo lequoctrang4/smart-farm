@@ -155,8 +155,6 @@ let changePassword = async (req, res) => {
     return res.status(200).json({
         message: result
     });
-    
-
 };
 
 let forgetPassword = async (req, res) =>{

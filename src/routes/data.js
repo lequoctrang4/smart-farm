@@ -1,18 +1,13 @@
 import  express  from "express";
-import path from 'path';
 import dataController from '../controller/dataController'
-import multer from 'multer';
-import appRoot from "app-root-path";
 import {checkAuthMiddleware} from "../utils/auth";
 
 let router = express.Router();
-
-
-
-const initDeviceRoute = (app) =>{
+const initDataRoute = (app) =>{
     router.use(checkAuthMiddleware);
-    router.get('/getControlsEquipByFarm', deviceController.getControlsEquipByFarm);
+    router.get("/get/:id", dataController.getDataById);
+
     return app.use('/data', router);
 }
 
-export default initDeviceRoute;
+export default initDataRoute;

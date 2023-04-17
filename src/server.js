@@ -2,6 +2,9 @@ import express from 'express';
 import configViewEngine from './configs/viewEngine';
 import initDeviceRoute from './routes/device';
 import initUserRoute from './routes/user';
+import initDataRoute from "./routes/data";
+
+import { addDataIndatabase } from "./api/adafruitApi";
 //có thể chuyển dữ liệu ở port khác
 import cors from 'cors';
 require('dotenv').config()
@@ -9,6 +12,8 @@ require('dotenv').config()
 
 const app = express()
 const port = process.env.PORT || 3001; //Nếu phía trước bị undifined thì gánư
+
+addDataIndatabase();
 
 app.use(cors());
 
@@ -34,6 +39,8 @@ configViewEngine(app);
 //init web route
 initDeviceRoute(app);
 initUserRoute(app);
+initDataRoute(app);
+
 
 //image
 //handle 404 not found
