@@ -1,5 +1,5 @@
 import deviceModel from '../models/deviceModel'
-import { setStatus } from '../api/adafruitApi';
+import { setStatus } from "../utils/adafruitServer";
 const fs = require("fs");
 let getControlEquipsByFarm = async (req, res) => {
   let result = await deviceModel.getControlEquipsByFarm(req.params.id);
@@ -94,9 +94,9 @@ let setStatusControlEquip = async (req, res) => {
         message: "success"
     })
 }
-let setAutoControlEquip = async (req, res) => {
+let setAutoDataEquip = async (req, res) => {
     let {id, auto} = req.params;
-    let rs = await deviceModel.setAutoControlEquip(auto, id);
+    let rs = await deviceModel.setAutoDataEquip(auto, id);
     if (rs) return res.status(200).json({
         message: "success"
     })
@@ -149,10 +149,10 @@ let addDataEquip = async (req, res) =>{
       return res.status(400).json({ message: req.fileValidationError });
     else if (!req.file)
       return res.status(400).json({ message: "No files selected" });
-    let {id, name, min, max, time, farm_id} = req.body;
-    if (!id || !name || !min || !max || !time || !farm_id) return res.status(400).json({ message: "Invalid Form" });
+    let {id, name, min, max, farm_id, min_action, max_action} = req.body;
+    if (!id || !name || !min || !max || !farm_id) return res.status(400).json({ message: "Invalid Form" });
     let image = req.file.filename;
-    let result = await deviceModel.addDataEquip(id, name, min, max, time, farm_id, image);
+    let result = await deviceModel.addDataEquip(id, name, min, min_action, max, max_action, farm_id, image);
     if (result === true) return res.status(200).json({
             message: "success"
     });
@@ -165,12 +165,13 @@ let editDataEquip = async (req, res) =>{
     else if (!req.file)
       return res.status(400).json({ message: "No files selected" });
     let old_id = req.params.id;
-    let {id, name, min, max, time, farm_id} = req.body;
-    if (!id || !name || !min || !max || !time || !farm_id || !old_id)
+    let {id, name, min, min_action, max, max_action, farm_id} = req.body;
+    if (!id || !name || !min || !max || !farm_id || !old_id)
       return res.status(400).json({ message: "Invalid Form" });
 
     let image = req.file.filename;
-    let result = await deviceModel.editDataEquip(id, name, min, max, time, farm_id, image, old_id);
+    let result = await deviceModel.editDataEquip(id, name, min, min_action, max, max_action, farm_id, image, old_id);
+    
     if (result === true)
     return res.status(200).json({
         message: "success"
@@ -197,7 +198,7 @@ module.exports = {
   editControlEquip,
   deleteControlEquip,
   setStatusControlEquip,
-  setAutoControlEquip,
+  setAutoDataEquip,
   getDataEquipsByFarm,
   getDataEquipById,
   addDataEquip,

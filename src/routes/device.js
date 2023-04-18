@@ -35,14 +35,14 @@ const initDeviceRoute = (app) =>{
     router.post('/addControlEquip', upload.single('image'), deviceController.addControlEquip);
     router.patch('/editControlEquip/:id', upload.single('image'), deviceController.editControlEquip);
     router.delete('/deleteControlEquip/:id', deviceController.deleteControlEquip);
-    router.patch('/setStatusControlEquip/:id/:status', upload.any(), deviceController.setStatusControlEquip);
-    router.patch('/setAutoControlEquip/:id/:auto', upload.any(), deviceController.setAutoControlEquip);
+    router.patch('/setStatusControlEquip/:id/:status', deviceController.setStatusControlEquip);
 
     router.get("/getDataEquipsByFarm/:id", deviceController.getDataEquipsByFarm);
     router.get("/getDataEquipById/:id", deviceController.getDataEquipById);
     router.post('/addDataEquip', upload.single('image'), deviceController.addDataEquip);
     router.patch('/editDataEquip/:id', upload.single('image'), deviceController.editDataEquip);
     router.delete('/deleteDataEquip/:id', deviceController.deleteDataEquip);
+    router.patch('/setAutoDataEquip/:id/:auto', deviceController.setAutoDataEquip);
     
     return app.use('/device', router);
 }

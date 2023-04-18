@@ -27,7 +27,7 @@ let addControlEquip = async (id, name, farm_id, filename) =>{
 let editControlEquip = async (id, name, farm_id, image, old_id) =>{
     try {
         await pool.execute(
-          `UPDATE control_equipment SET id = ?, name =? = ?, farm_id =? ,image = ? where id = ?`,
+          `UPDATE control_equipment SET id = ?, name =?, farm_id =? ,image = ? where id = ?`,
           [id, name, farm_id, image, old_id]
         );
         return true;
@@ -52,17 +52,20 @@ let setStatusControlEquip = async (id, status) =>{
         return error.sqlMessage;
     }
 };
-let setAutoControlEquip = async (auto, id) =>{
-    try {
-        await pool.execute(`UPDATE control_equipment SET auto = ? WHERE id = ?`, [auto, id]);
-        return true;
-    } catch (error) {
-        return error.sqlMessage;
-    }
+let setAutoDataEquip = async (auto, id) => {
+  try {
+    await pool.execute(`UPDATE data_equipment SET auto = ? WHERE id = ?`, [
+      auto,
+      id,
+    ]);
+    return true;
+  } catch (error) {
+    return error.sqlMessage;
+  }
 };
 let getDataEquip = async () => {
     let [rs] = await pool.execute(
-      `select id from data_equipment`,
+      `select * from data_equipment`,
     );
     return rs;
 };
@@ -74,11 +77,13 @@ let getDataEquipById = async (id) => {
   let [rs] = await pool.execute(`select * from data_equipment where id = ?`, [id]);
   return rs;
 };
-let addDataEquip = async (id, name, min, max, time, farm_id, image) =>{
+let addDataEquip = async (id, name, min, min_action, max, max_action, farm_id, image) =>{
     try {
+        if (!min_action) min_action = null;
+        if (!max_action) max_action = null;
         await pool.execute(
-          `INSERT INTO data_equipment(id, name, min, max, time, image, farm_id) VALUES (?,?,?,?,?,?,?)`,
-          [id, name, min, max, time, image, farm_id]
+          `INSERT INTO data_equipment(id, name, min, min_action, max, max_action, image, farm_id) VALUES (?,?,?,?,?,?,?,?)`,
+          [id, name, min, min_action, max, max_action, image, farm_id]
         );
         return true;
     } catch (error) {
@@ -86,13 +91,15 @@ let addDataEquip = async (id, name, min, max, time, farm_id, image) =>{
     }
 };
 
-let editDataEquip = async (id, name, min, max, time, farm_id, image, old_id) =>{
+let editDataEquip = async (id, name, min, min_action,  max, max_action, farm_id, image, old_id) =>{
     try {
-        await pool.execute(`UPDATE data_equipment SET id = ?, name =? = ?, min =?, max = ?, time =?, image = ?, farm_id =? where id = ?`,
-         [id, name, min, max, time, image, farm_id, old_id]);
+        if (!min_action) min_action = null;
+        if (!max_action) max_action = null;
+        await pool.execute(`UPDATE data_equipment SET id = ?, name = ?, min = ?, min_action = ?, max = ?, max_action = ?, image = ?, farm_id =? where id = ?`,
+         [id, name, min, min_action, max, max_action, image, farm_id, old_id]);
         return true;
     } catch (error) {
-        return error.sqlMessage;
+        return error;
     }
 };
 
@@ -112,7 +119,7 @@ module.exports = {
   editControlEquip,
   deleteControlEquip,
   setStatusControlEquip,
-  setAutoControlEquip,
+  setAutoDataEquip,
   getDataEquipsByFarm,
   addDataEquip,
   editDataEquip,

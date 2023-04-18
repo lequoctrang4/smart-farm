@@ -46,9 +46,7 @@ const getData = async (feed_name) => {
     return error.response.data;
   }
 };
-export const autoControl = () => {
-  setIntervalExact(async () => {},);
-};
+
 
 export const addDataIndatabase = () =>{
   setIntervalExact(async () => {
@@ -56,8 +54,28 @@ export const addDataIndatabase = () =>{
       const equip_feed = await deviceModel.getDataEquip();
       equip_feed.forEach(async (element) => {
         const data = await getData(element.id);
-        let rs = await dataModel.addData(element.id, data.value);
-        // console.log(rs);
+        if (data){
+          if (element.auto) {
+            if (element.min_action) {
+              if (data.value < element.min) {
+                await setStatus(element.min_action, 1);
+              } else {
+                await setStatus(element.min_action, 0);
+              }
+            } else if (element.max_action) {
+              if (data.value > element.max) {
+                await setStatus(element.max_action, 1);
+              } else {
+                await setStatus(element.max_action, 0);
+              }
+            }
+          }
+          else {
+            if (element.min_action) await setStatus(element.min_action, 0);
+            if (element.max_action) await setStatus(element.max_action, 0);
+          }
+          await dataModel.addData(element.id, data.value);
+        }
       });
     } catch (error) {
       console.log(error.message);

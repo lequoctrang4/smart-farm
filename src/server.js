@@ -4,7 +4,7 @@ import initDeviceRoute from './routes/device';
 import initUserRoute from './routes/user';
 import initDataRoute from "./routes/data";
 
-import { addDataIndatabase } from "./api/adafruitApi";
+import { addDataIndatabase } from "./utils/adafruitServer";
 //có thể chuyển dữ liệu ở port khác
 import cors from 'cors';
 require('dotenv').config()
