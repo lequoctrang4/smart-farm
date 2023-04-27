@@ -62,7 +62,8 @@ export const addDataIndatabase = () =>{
               } else {
                 await setStatus(element.min_action, 0);
               }
-            } else if (element.max_action) {
+            } 
+            if (element.max_action) {
               if (data.value > element.max) {
                 await setStatus(element.max_action, 1);
               } else {
