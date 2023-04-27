@@ -181,6 +181,12 @@ let editDataEquip = async (req, res) =>{
     });
 };
 
+let setCondition = async (req, res) => {
+  let { id, min, max } = req.body;
+  let rs = await deviceModel.setCondition(id, min, max);
+  if (!rs) return res.status(400).json({message: "Invalid Input"});
+  return res.status(200).json({message: "Success"});
+};
 let deleteDataEquip = async (req, res) =>{
     let rs = await deviceModel.deleteDataEquip(req.params.id);
     if(rs === true)
@@ -204,6 +210,7 @@ module.exports = {
   addDataEquip,
   editDataEquip,
   deleteDataEquip,
+  setCondition,
 };
 
 

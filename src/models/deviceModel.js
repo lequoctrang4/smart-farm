@@ -111,7 +111,17 @@ let deleteDataEquip = async (page) =>{
         return error.sqlMessage;
     }
 };
-
+let setCondition = async (id, min, max) => {
+  try {
+    await pool.execute(
+      `UPDATE data_equipment SET min = ?, max =? where id = ?`,
+      [min, max, id]
+    );
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
 module.exports = {
   getControlEquipsByFarm,
   getControlEquipById,
@@ -126,4 +136,5 @@ module.exports = {
   deleteDataEquip,
   getDataEquipById,
   getDataEquip,
+  setCondition,
 };

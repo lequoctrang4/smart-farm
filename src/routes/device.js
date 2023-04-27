@@ -41,6 +41,7 @@ const initDeviceRoute = (app) =>{
     router.get("/getDataEquipById/:id", deviceController.getDataEquipById);
     router.post('/addDataEquip', upload.single('image'), deviceController.addDataEquip);
     router.patch('/editDataEquip/:id', upload.single('image'), deviceController.editDataEquip);
+    router.patch('/setCondition', deviceController.setCondition);
     router.delete('/deleteDataEquip/:id', deviceController.deleteDataEquip);
     router.patch('/setAutoDataEquip/:id/:auto', deviceController.setAutoDataEquip);
     
