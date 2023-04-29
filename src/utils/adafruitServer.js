@@ -66,8 +66,10 @@ export const addDataIndatabase = () =>{
             if (element.max_action) {
               if (data.value > element.max) {
                 await setStatus(element.max_action, 1);
+                await deviceModel.setStatusControlEquip(element.max_action, 1);
               } else {
                 await setStatus(element.max_action, 0);
+                await deviceModel.setStatusControlEquip(element.max_action, 0);
               }
             }
           }
