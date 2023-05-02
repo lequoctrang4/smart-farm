@@ -1,6 +1,6 @@
 DROP DATABASE `farm1`;
-create database if not exists `farm1`;
-use `farm1`;
+create database if not exists `farm`;
+use `farm`;
 
 CREATE TABLE if not EXISTS `farm` (
   `id` int(10) NOT NULL PRIMARY KEY,
@@ -55,7 +55,7 @@ CREATE TABLE if not EXISTS `user` (
   `register_at` date NOT NULL,
   `avatar` varchar(100),
   `isAdmin` int(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+)
 
 
 CREATE TABLE if not EXISTS `statistical` (
