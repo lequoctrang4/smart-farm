@@ -1,4 +1,3 @@
-DROP DATABASE `farm1`;
 create database if not exists `farm`;
 use `farm`;
 
